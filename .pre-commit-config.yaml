@@ -1,0 +1,30 @@
+---
+repos:
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.11.0-1
+    hooks:
+      - id: shfmt         # prebuilt upstream executable
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.10.0
+    hooks:
+      - id: shellcheck
+  - repo: https://github.com/ansible/ansible-lint
+    rev: v25.1.1  # remplace par la version stable la plus récente
+    hooks:
+      - id: ansible-lint
+        additional_dependencies:
+          - jmespath
+  - repo: local
+    hooks:
+      - id: check-ansible-vault
+        name: Check Ansible Vault Encryption
+        entry: bash check_ansible_vault.sh
+        language: system
+        files: (^|/)vault/.*$
+        stages: [pre-commit]
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.99.0  # remplace par la dernière version stable
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_validate
+      - id: terraform_tflint

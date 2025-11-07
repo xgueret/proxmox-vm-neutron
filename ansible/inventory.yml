@@ -1,0 +1,10 @@
+all:
+  children:
+    proxmox:
+      hosts:
+        pve:
+    neutron:
+      hosts:
+        neutron-90:
+          ansible_host: neutron-90
+          # ansible_python_interpreter: /usr/bin/python3
