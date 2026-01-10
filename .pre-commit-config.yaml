@@ -8,12 +8,14 @@ repos:
     rev: v0.10.0
     hooks:
       - id: shellcheck
-  - repo: https://github.com/ansible/ansible-lint
-    rev: v25.1.1  # remplace par la version stable la plus récente
+  - repo: local
     hooks:
       - id: ansible-lint
-        additional_dependencies:
-          - jmespath
+        name: Ansible-lint
+        entry: ansible-lint
+        language: system
+        files: \.(yml|yaml)$
+        pass_filenames: false
   - repo: local
     hooks:
       - id: check-ansible-vault
