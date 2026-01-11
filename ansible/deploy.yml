@@ -19,6 +19,9 @@
         mode: '0770'
 
   roles:
+    - role: motd
+      tags:
+        - motd
     - role: docker
       tags:
         - docker

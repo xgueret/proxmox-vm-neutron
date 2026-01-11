@@ -20,4 +20,6 @@
   community.docker.docker_compose_v2:
     project_src: /opt/portainer/agent
     state: present
+    recreate: auto
+    remove_orphans: true
   register: portainer_agent_deploy
