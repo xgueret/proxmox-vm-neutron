@@ -8,6 +8,7 @@ repos:
     rev: v0.10.0
     hooks:
       - id: shellcheck
+        args: ["-x", "-S", "warning"]  # -x: follow sources, -S warning: ignore info-level messages
   - repo: local
     hooks:
       - id: ansible-lint

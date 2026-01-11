@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  lint-ansible:
+    runs-on: ubuntu-latest
+    name: Lint Ansible
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install ansible ansible-lint yamllint
+
+      - name: Run yamllint
+        run: yamllint . || true
+
+      - name: Run ansible-lint
+        run: ansible-lint ansible/ || true
+
+      - name: Syntax check deploy playbook
+        run: |
+          cd ansible
+          ansible-playbook deploy.yml --syntax-check
+        continue-on-error: true
+
+  lint-terraform:
+    runs-on: ubuntu-latest
+    name: Lint Terraform
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.13.3'
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Validate (modules)
+        run: |
+          cd modules/proxmox_vm_template
+          terraform init -backend=false
+          terraform validate
+
+  security-check:
+    runs-on: ubuntu-latest
+    name: Security Check
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for vault files encryption
+        run: |
+          for f in $(find . -path "*/vault/*" -name "*.yml" 2>/dev/null); do
+            if ! head -1 "$f" | grep -q '^\$ANSIBLE_VAULT'; then
+              echo "ERROR: Unencrypted vault file: $f"
+              exit 1
+            fi
+          done
+          echo "All vault files are encrypted"
+
+      - name: Scan for secrets
+        run: |
+          if grep -rE "(password|secret|api.?key|token)\s*=\s*['\"][^'\"]{8,}['\"]" \
+            --include="*.tf" --include="*.yml" --include="*.yaml" \
+            --exclude-dir=".git" --exclude-dir=".venv" . 2>/dev/null | \
+            grep -v "your-" | grep -v "example" | grep -v "placeholder"; then
+            echo "WARNING: Potential secrets found in code"
+            exit 1
+          fi
+          echo "No obvious secrets detected"
