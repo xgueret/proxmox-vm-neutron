@@ -76,3 +76,10 @@ projects/kubeBeast/ansible/join_command.out
 
 
 .claude/
+
+# Security - Private keys and credentials
+*.pem
+*.key
+*credentials*
+*secret*
+!SECURITY.md
