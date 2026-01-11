@@ -1,3 +1,12 @@
+```
+ ███╗   ██╗███████╗██╗   ██╗████████╗██████╗  ██████╗ ███╗   ██╗
+ ████╗  ██║██╔════╝██║   ██║╚══██╔══╝██╔══██╗██╔═══██╗████╗  ██║
+ ██╔██╗ ██║█████╗  ██║   ██║   ██║   ██████╔╝██║   ██║██╔██╗ ██║
+ ██║╚██╗██║██╔══╝  ██║   ██║   ██║   ██╔══██╗██║   ██║██║╚██╗██║
+ ██║ ╚████║███████╗╚██████╔╝   ██║   ██║  ██║╚██████╔╝██║ ╚████║
+ ╚═╝  ╚═══╝╚══════╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+```
+
 # 🚀 Neutron - Multi-Service Platform Automation
 
 ![Stars](https://img.shields.io/github/stars/xgueret/proxmox-vm-neutron?style=social) ![Last Commit](https://img.shields.io/github/last-commit/xgueret/proxmox-vm-neutron) ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
@@ -79,6 +88,7 @@ pm_api_token_secret  = "your-token-secret"
 
 ### 🔑 Available Ansible Tags
 
+- `motd` - Deploy custom MOTD with ASCII art banner
 - `docker` - Install Docker and Docker Compose
 - `portainer-agent` - Deploy Portainer Agent
 
@@ -119,6 +129,7 @@ pre-commit install
 │   │   └── neutron/              # Group variables
 │   │       └── vault/            # Encrypted variables
 │   └── roles/                    # Ansible roles
+│       ├── motd/                 # Custom MOTD banner
 │       ├── docker/               # Docker installation
 │       └── portainer_agent/      # Portainer Agent
 ├── terraform/
