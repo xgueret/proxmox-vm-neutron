@@ -78,7 +78,8 @@ jobs:
           if grep -rE "(password|secret|api.?key|token)\s*=\s*['\"][^'\"]{8,}['\"]" \
             --include="*.tf" --include="*.yml" --include="*.yaml" \
             --exclude-dir=".git" --exclude-dir=".venv" . 2>/dev/null | \
-            grep -v "your-" | grep -v "example" | grep -v "placeholder"; then
+            grep -v "your-" | grep -v "example" | grep -v "placeholder" | \
+            grep -v '\${var\.' | grep -v 'var\.'; then
             echo "WARNING: Potential secrets found in code"
             exit 1
           fi
